@@ -1,1 +1,0 @@
-ثم انشاء مجلد  models وثم وضع ملف base_model.py و __init__.py
