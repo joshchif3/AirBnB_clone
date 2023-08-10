@@ -45,6 +45,12 @@ class BaseModel:
     """
 
     def __init__(self):
+        """
+        Method __init__ that initializes the attributes.
+        - uuid.uuid4 to give the id a unique uuid.
+        - datetime.now() to make the created_at object's creation time.
+        - updated_at object's update time.
+        """
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
@@ -52,12 +58,15 @@ class BaseModel:
         self.my_number = None
 
     def __str__(self):
+        """A string representation of an object using the method __str__"""
         return (f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}")
 
     def save(self):
+        """An update to the attribute updated_at using the method save"""
         self.updated_at = datetime.now()
 
     def to_dict(self):
+        """A dictionary representation of an object using the method to_dict"""
         dictionnary = {"my_number": self.my_number,
                        "name": self.name,
                        "updated_at": self.updated_at.isoformat(),
