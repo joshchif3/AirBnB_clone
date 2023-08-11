@@ -4,6 +4,7 @@
 """
 import uuid
 from datetime import datetime
+from engine import storage
 
 
 class BaseModel:
@@ -52,14 +53,16 @@ class BaseModel:
         - updated_at object's update time.
         - kwargs used to initialize the atributes.
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
         if kwargs is not None:
             if 'name' in kwargs:
                 self.name = kwargs['name']
             if 'my_number' in kwargs:
                 self.my_number = kwargs['my_number']
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+        storage.new(self)
 
     def __str__(self):
         """A string representation of an object using the method __str__"""
@@ -68,6 +71,7 @@ class BaseModel:
     def save(self):
         """An update to the attribute updated_at using the method save"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """A dictionary representation of an object using the method to_dict"""
@@ -79,3 +83,17 @@ class BaseModel:
                        "created_at": self.created_at.isoformat()
                        }
         return dictionnary
+
+
+all_objs = storage.all()
+print("-- Reloaded objects --")
+for obj_id in all_objs.keys():
+    obj = all_objs[obj_id]
+    print(obj)
+
+print("-- Create a new object --")
+my_model = BaseModel()
+my_model.name = "My_First_Model"
+my_model.my_number = 89
+my_model.save()
+print(my_model)
