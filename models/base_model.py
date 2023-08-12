@@ -83,11 +83,8 @@ class BaseModel:
 
     def to_dict(self):
         """A dictionary representation of an object using the method to_dict"""
-        dictionnary = {"my_number": self.my_number,
-                       "name": self.name,
-                       "updated_at": self.updated_at.isoformat(),
-                       "__class__": self.__class__.__name__,
-                       "id": self.id,
-                       "created_at": self.created_at.isoformat()
-                       }
+        dictionnary = self.__dict__.copy()
+        dictionnary["__class__"] = self.__class__.__name__
+        dictionnary["created_at"] = self.updated_at.isoformat()
+        dictionnary["updated_at"] = self.updated_at.isoformat()
         return dictionnary
