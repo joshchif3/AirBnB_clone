@@ -47,22 +47,30 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """
-        Method __init__ that initializes the attributes.
+        Method __init__ that initializes the attributes eather using
+        kwargs if kwargs do exist or casual init.
+        - time_format is to specify the format of date and time.
+        - setattr to give the instance an attribute with a certain val.
+        - strptime to set the format of datetime to the time_format.
         - uuid.uuid4 to give the id a unique uuid.
         - datetime.now() to make the created_at object's creation time.
         - updated_at object's update time.
-        - kwargs used to initialize the atributes.
+        - kwargs used to initialize the attributes.
         """
-        if kwargs is not None:
-            if 'name' in kwargs:
-                self.name = kwargs['name']
-            if 'my_number' in kwargs:
-                self.my_number = kwargs['my_number']
+        if kwargs:
+            time_format = '%Y-%m-%dT%H:%M:%S.%f'
+            for key, val in kwargs.items():
+                if key == '__class__':
+                    continue
+                elif key == 'created_at' or key == 'updated_at':
+                    setattr(self, key, datetime.strptime(val, time_format))
+                else:
+                    setattr(self, key, val)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)  # why indentation
+            storage.new(self)
 
     def __str__(self):
         """A string representation of an object using the method __str__"""
