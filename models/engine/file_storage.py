@@ -4,7 +4,6 @@
 """
 import json
 import os
-from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -36,13 +35,12 @@ class FileStorage:
         The method reload that reloads the dictionary from file and
         creates obj from it
         """
-        if os.path.isfile(FileStorage.__file_path):
-            with open(FileStorage.__file_path, "r") as f:
-                loaded = json.loads(f)
-                class_map = {"BaseModel": BaseModel}
-                for key, val in loaded.items():
-                    cls, obj = key.split('.')
-                    if cls in class_map:
-                        instance_class = class_map[cls]
-                        instance = instance_class(**val)
-                        FileStorage.__objects[key] = instance
+        try:
+            with open(FileStorage.__file_path) as f:
+                dictionary = json.load(f)
+                for val in dictionary.values():
+                    cls_name = val["__class__"]
+                    del val["__class__"]
+                    self.new(eval(cls_name)(**val))
+        except FileNotFoundError:
+            return
