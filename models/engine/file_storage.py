@@ -15,19 +15,19 @@ class FileStorage:
 
     def all(self):
         """The method all that returns the objects"""
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """The method new that sets the key of the dictionary of the objects"""
         key = f"{obj.__class__.__name__}.{obj.id}"
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """The method save that saves the new objects as str in a file"""
-        with open(self.__file_path, "w") as file:
-            serialized = {}
-            for key, val in self.__objects.items():
-                serialized = val.to_dict()
+        serialized = {}
+        for key, val in FileStorage.__objects.items():
+            serialized[key] = val.to_dict()
+        with open(FileStorage.__file_path, "w") as file:
             file.write(json.dumps(serialized))
 
     def reload(self):
