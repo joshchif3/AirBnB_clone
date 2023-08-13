@@ -7,13 +7,14 @@ import sys
 import shlex
 import models
 from models.base_model import BaseModel
+from models.user import User
 import shlex
 
 
 class HBNBCommand(cmd.Cmd):
     """Class definition HBNBCommand which inherits from cmd.Cmd"""
     prompt = "(hbnb)"
-    classes_map = ["BaseModel"]
+    classes_map = ["BaseModel", "User"]
 
     def do_quit(self, arg):
         """Exit the program with the Quit command"""
@@ -138,7 +139,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** Attribute doesn't exist in the instance **")
         except NameError:
             print("** class doesn't exist **")
-
 
 
 if __name__ == '__main__':

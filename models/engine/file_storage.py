@@ -5,6 +5,7 @@
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -39,11 +40,13 @@ class FileStorage:
         if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r") as f:
                 loaded = json.loads(f.read())
-                class_map = {"BaseModel": BaseModel}
+                class_map = {
+                    "BaseModel": BaseModel,
+                    "User": User
+                }
             for key, val in loaded.items():
                 cls = key.split('.')[0]
                 if cls in class_map:
                     instance_class = class_map[cls]
                     instance = instance_class(**val)
                     self.new(instance)
-
