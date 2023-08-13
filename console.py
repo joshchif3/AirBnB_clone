@@ -102,6 +102,44 @@ class HBNBCommand(cmd.Cmd):
                         print(f"{str(val)}", end="")
                 print()
 
+    def do_update(self, arg):
+        """Update method to update an attribute in a given object"""
+        args = shlex.split(arg)
+        if not args:
+            print("** class name missing **")
+            return
+        try:
+            class_name = args[0]
+            if class_name not in self.classes_map:
+                print("** class doesn't exist **")
+                return
+            if len(args) < 2:
+                print("** instance id missing **")
+                return
+            instance_id = args[1]
+            if len(args) < 3:
+                print("** attribute name missing **")
+                return
+            if len(args) < 4:
+                print("** value missing **")
+                return
+            objects = models.storage.all()
+            instance_key = f"{class_name}.{instance_id}"
+            instance = objects[instance_key]
+            if hasattr(instance, args[2]):
+                attribute_type = type(getattr(instance, args[2]))
+                try:
+                    attribute_value = attribute_type(args[3])
+                    setattr(instance, args[2], attribute_value)
+                    models.storage.save()
+                except ValueError:
+                    print("** Invalid value for attribute type **")
+            else:
+                print("** Attribute doesn't exist in the instance **")
+        except NameError:
+            print("** class doesn't exist **")
+
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
