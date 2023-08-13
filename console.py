@@ -11,6 +11,7 @@ from models.base_model import BaseModel
 class HBNBCommand(cmd.Cmd):
     """Class definition HBNBCommand which inherits from cmd.Cmd"""
     prompt = "(hbnb)"
+    classes_map = ["BaseModel"]
 
     def do_quit(self, arg):
         """Exit the program with the Quit command"""
@@ -60,14 +61,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """Destroy method that destroys an object."""
-        classes_map = ["BaseModel"]
         args = arg.split()
         if not args:
             print("** class name missing **")
             return
         try:
             class_name = args[0]
-            if class_name not in classes_map:
+            if class_name not in self.classes_map:
                 print("** class doesn't exist **")
                 return
             if len(args) < 2:
@@ -83,6 +83,22 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
+
+    def do_all(self, arg):
+        """To print all objects or objects of a specific class"""
+        objects = models.storage.all()
+        if not arg.split():
+            for val in objects.values():
+                print(f"{str(val)}", end="")
+            print()
+        else:
+            if arg not in self.classes_map:
+                print("** class doesn't exist **")
+            else:
+                for val in objects.values():
+                    if type(val).__name__ == arg:
+                        print(f"{str(val)}", end="")
+                print()
 
 
 if __name__ == '__main__':
