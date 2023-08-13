@@ -20,6 +20,10 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+    def emptyline(self):
+        """To do nothing when an empty line is the entry."""
+        pass
+
     def do_create(self, arg):
         """Create method that creats an object"""
         if arg is None:
