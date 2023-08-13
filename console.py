@@ -4,6 +4,7 @@
 """
 import cmd
 import sys
+import models
 from models.base_model import BaseModel
 
 
@@ -31,6 +32,7 @@ class HBNBCommand(cmd.Cmd):
         elif hasattr(sys.modules[__name__], arg):
             cls = getattr(sys.modules[__name__], arg)
             instance = cls()
+            models.storage.save()
             print(instance.id)
         else:
             print("** class doesn't exist **")
@@ -41,7 +43,6 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-
         try:
             class_name = args[0]
             if len(args) < 2:
@@ -49,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
                 return
             instance_id = args[1]
             key = class_name + "." + instance_id
-            objects = storage.all()
+            objects = models.storage.all()
             if key in objects:
                 print(objects[key])
             else:
