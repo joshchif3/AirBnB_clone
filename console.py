@@ -4,6 +4,7 @@
 """
 import cmd
 import sys
+import models
 from models.base_model import BaseModel
 
 
@@ -31,8 +32,30 @@ class HBNBCommand(cmd.Cmd):
         elif hasattr(sys.modules[__name__], arg):
             cls = getattr(sys.modules[__name__], arg)
             instance = cls()
+            models.storage.save()
             print(instance.id)
         else:
+            print("** class doesn't exist **")
+
+    def do_show(self, arg):
+        """Print the string representation of an instance."""
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
+        try:
+            class_name = args[0]
+            if len(args) < 2:
+                print("** instance id missing **")
+                return
+            instance_id = args[1]
+            key = class_name + "." + instance_id
+            objects = models.storage.all()
+            if key in objects:
+                print(objects[key])
+            else:
+                print("** no instance found **")
+        except NameError:
             print("** class doesn't exist **")
 
 
