@@ -57,35 +57,33 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
-    
+
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name"""
+        """Destroy method that destroys an object."""
+        classes_map = ["BaseModel"]
         args = arg.split()
         if not args:
             print("** class name missing **")
             return
-
         try:
             class_name = args[0]
-            if not hasattr(self, class_name):
+            if class_name not in classes_map:
                 print("** class doesn't exist **")
                 return
-
             if len(args) < 2:
                 print("** instance id missing **")
                 return
-
             instance_id = args[1]
             key = class_name + "." + instance_id
             objects = models.storage.all()
-
             if key in objects:
                 del objects[key]
-                models.storage.save()  
+                models.storage.save()
             else:
                 print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
-    
+
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
