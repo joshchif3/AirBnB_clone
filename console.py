@@ -134,6 +134,9 @@ class HBNBCommand(cmd.Cmd):
                 return
             objects = models.storage.all()
             instance_key = f"{class_name}.{instance_id}"
+            if instance_key not in objects:
+                print("** no instance found **")
+                return
             instance = objects[instance_key]
             if hasattr(instance, args[2]):
                 attribute_type = type(getattr(instance, args[2]))
@@ -147,7 +150,3 @@ class HBNBCommand(cmd.Cmd):
                 print("** Attribute doesn't exist in the instance **")
         except NameError:
             print("** class doesn't exist **")
-
-
-if __name__ == '__main__':
-    HBNBCommand().cmdloop()
