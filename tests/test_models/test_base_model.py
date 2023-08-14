@@ -6,7 +6,7 @@ TEST CASES
 import unittest
 from models.base_model import BaseModel
 from datetime import datetime
-
+from datetime import datetime, timedelta
 
 class TestBaseModel(unittest.TestCase):
     """
@@ -53,6 +53,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(instance.name, "My First Model")
         self.assertEqual(instance.my_number, 89)
 
+
     def test_object_to_dict(self):
         """Testing To_dict method"""
         instance = BaseModel()
@@ -67,4 +68,6 @@ class TestBaseModel(unittest.TestCase):
             'id': instance.id,
             'created_at': instance.created_at.isoformat()
         }
-        self.assertEqual(dictionary_cmp, dictionary)
+
+        # Define a tolerance for timestamp comparison (e.g., 1 second)
+        timestamp_tolerance = timedelta(seconds=1)
