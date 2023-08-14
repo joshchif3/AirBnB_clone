@@ -10,5 +10,5 @@ class State(BaseModel):
     name = ""
 
     def __init__(self, *args, **kwargs):
-        """The init method for the State class"""
+        """The init method for the State class_"""
         super().__init__(*args, **kwargs)
