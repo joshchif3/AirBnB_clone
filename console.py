@@ -38,15 +38,16 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Create method that creats an object"""
-        if arg is None:
-            print("** class name missing **")
-        elif hasattr(sys.modules[__name__], arg):
-            cls = getattr(sys.modules[__name__], arg)
-            instance = cls()
-            models.storage.save()
-            print(instance.id)
+        if arg:
+            if hasattr(sys.modules[__name__], arg):
+                cls = getattr(sys.modules[__name__], arg)
+                instance = cls()
+                models.storage.save()
+                print(instance.id)
+            else:
+                print("** class doesn't exist **")
         else:
-            print("** class doesn't exist **")
+            print("** class name missing **")
 
     def do_show(self, arg):
         """Print the string representation of an instance."""
