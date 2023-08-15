@@ -116,40 +116,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """Update method to update an attribute in a given object"""
-        args = shlex.split(arg)
-        if not args:
+        args = arg.split()
+        if len(args) == 0:
             print("** class name missing **")
-            return
-        try:
-            class_name = args[0]
-            if class_name not in self.classes_map:
-                print("** class doesn't exist **")
-                return
-            if len(args) < 2:
-                print("** instance id missing **")
-                return
-            instance_id = args[1]
-            if len(args) < 3:
-                print("** attribute name missing **")
-                return
-            if len(args) < 4:
-                print("** value missing **")
-                return
-            objects = models.storage.all()
-            instance_key = f"{class_name}.{instance_id}"
-            if instance_key not in objects:
-                print("** no instance found **")
-                return
-            instance = objects[instance_key]
-            if hasattr(instance, args[2]):
-                attribute_type = type(getattr(instance, args[2]))
-                try:
-                    attribute_value = attribute_type(args[3])
-                    setattr(instance, args[2], attribute_value)
-                    models.storage.save()
-                except ValueError:
-                    print("** Invalid value for attribute type **")
-            else:
-                print("** Attribute doesn't exist in the instance **")
-        except NameError:
+        elif args[0] not in self.classes_map:
             print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        else:
+            objects = models.storage.all()
+            key = f"{args[0]}.{args[1]}"
+            if key not in objects.keys():
+                print("** no instance found **")
+            elif len(args) == 2:
+                print("** attribute name missing **")
+            elif len(args) == 3:
+                print("** value missing **")
+            else:
+                instance = objects[key]
+                attribute_type = type(getattr(instance, args[2], ''))
+                setattr(instance, args[2], attribute_type(args[3]))
+                instance.save()
+
+
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
