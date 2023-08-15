@@ -6,12 +6,21 @@ TEST CASES
 import unittest
 from models.review import Review
 from datetime import datetime
+import pep8
 
 
 class TestReview(unittest.TestCase):
     """
     TESTING CLASS
     """
+
+    def test_pep8_compliance(self):
+        """ Test PEP8 compliance using pycodestyle"""
+        pycodestyle = pep8.StyleGuide(quiet=True)
+        file_paths = ["models/user.py"]
+        result = pycodestyle.check_files(file_paths)
+        error_message = "Found code style errors (and warnings)."
+        self.assertEqual(result.total_errors, 0, error_message)
 
     def test_instance(self):
         """Testing a new created instance"""
@@ -50,3 +59,13 @@ class TestReview(unittest.TestCase):
         instance = Review()
         instance.text = "This is a review"
         self.assertEqual(instance.text, "This is a review")
+
+    def test_instance_init_none(self):
+        """Testing none"""
+        instance = Review()
+        instance.place_id = None
+        instance.user_id = None
+        instance.text = None
+        self.assertEqual(instance.place_id, None)
+        self.assertEqual(instance.user_id, None)
+        self.assertEqual(instance.text, None)

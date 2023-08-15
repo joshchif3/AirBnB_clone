@@ -7,11 +7,21 @@ import unittest
 from models.base_model import BaseModel
 from datetime import datetime
 from datetime import datetime, timedelta
+import pep8
+
 
 class TestBaseModel(unittest.TestCase):
     """
     TESTING CLASS
     """
+
+    def test_pep8_compliance(self):
+        """ Test PEP8 compliance using pycodestyle"""
+        pycodestyle = pep8.StyleGuide(quiet=True)
+        file_paths = ["models/user.py"]
+        result = pycodestyle.check_files(file_paths)
+        error_message = "Found code style errors (and warnings)."
+        self.assertEqual(result.total_errors, 0, error_message)
 
     def test_instance(self):
         """Testing a new created instance"""
@@ -52,7 +62,6 @@ class TestBaseModel(unittest.TestCase):
         instance.my_number = 89
         self.assertEqual(instance.name, "My First Model")
         self.assertEqual(instance.my_number, 89)
-
 
     def test_object_to_dict(self):
         """Testing To_dict method"""
